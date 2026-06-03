@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temperature Converter</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f6f2;
+      --panel: #ffffff;
+      --text: #222831;
+      --muted: #69707d;
+      --line: #d8dde6;
+      --accent: #0b7a75;
+      --accent-dark: #075f5b;
+      --error: #b3261e;
+      --result-bg: #eef8f6;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(11, 122, 117, 0.13), transparent 35%),
+        linear-gradient(315deg, rgba(245, 166, 35, 0.12), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      padding: 24px;
+    }
+
+    main {
+      width: min(100%, 440px);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 24px 60px rgba(34, 40, 49, 0.14);
+      padding: 28px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.65rem;
+      line-height: 1.2;
+    }
+
+    .intro {
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    form {
+      display: grid;
+      gap: 18px;
+    }
+
+    label,
+    legend {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px 12px;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    input[type="text"]:focus {
+      outline: 3px solid rgba(11, 122, 117, 0.18);
+      border-color: var(--accent);
+    }
+
+    fieldset {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    .unit-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .unit-option {
+      position: relative;
+    }
+
+    .unit-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .unit-option span {
+      display: grid;
+      min-height: 44px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .unit-option input:checked + span {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .unit-option input:focus-visible + span {
+      outline: 3px solid rgba(11, 122, 117, 0.22);
+      outline-offset: 2px;
+    }
+
+    button {
+      min-height: 48px;
+      border: 0;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 160ms ease, transform 160ms ease;
+    }
+
+    button:hover {
+      background: var(--accent-dark);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .message {
+      min-height: 1.3em;
+      margin: -8px 0 0;
+      color: var(--error);
+      font-size: 0.92rem;
+    }
+
+    .result {
+      margin-top: 22px;
+      min-height: 92px;
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      border: 1px solid #c6e4df;
+      border-radius: 8px;
+      background: var(--result-bg);
+      padding: 18px;
+    }
+
+    .result-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .result-value {
+      font-size: 1.45rem;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    @media (max-width: 420px) {
+      main {
+        padding: 22px;
+      }
+
+      .unit-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Temperature Converter</h1>
+    <p class="intro">Enter a temperature, choose its unit, and convert it to the other units.</p>
+
+    <form id="converter-form" novalidate>
+      <div>
+        <label for="temperature">Temperature</label>
+        <input id="temperature" name="temperature" type="text" inputmode="decimal" autocomplete="off" placeholder="Example: 72">
+      </div>
+
+      <fieldset>
+        <legend>Input unit</legend>
+        <div class="unit-options" role="radiogroup" aria-label="Input unit">
+          <label class="unit-option">
+            <input type="radio" name="unit" value="celsius" checked>
+            <span>Celsius</span>
+          </label>
+          <label class="unit-option">
+            <input type="radio" name="unit" value="fahrenheit">
+            <span>Fahrenheit</span>
+          </label>
+          <label class="unit-option">
+            <input type="radio" name="unit" value="kelvin">
+            <span>Kelvin</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <p class="message" id="message" aria-live="polite"></p>
+      <button type="submit">Convert</button>
+    </form>
+
+    <section class="result" aria-live="polite" aria-atomic="true">
+      <div class="result-label">Converted temperature</div>
+      <div class="result-value" id="result">Waiting for input</div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.querySelector("#converter-form");
+    const temperatureInput = document.querySelector("#temperature");
+    const message = document.querySelector("#message");
+    const result = document.querySelector("#result");
+
+    const unitLabels = {
+      celsius: "C",
+      fahrenheit: "F",
+      kelvin: "K"
+    };
+
+    function round(value) {
+      return Math.round(value * 100) / 100;
+    }
+
+    function format(value, unit) {
+      const degree = unit === "kelvin" ? "" : "\u00B0";
+      return `${round(value)} ${degree}${unitLabels[unit]}`;
+    }
+
+    function toCelsius(value, unit) {
+      if (unit === "fahrenheit") {
+        return (value - 32) * 5 / 9;
+      }
+
+      if (unit === "kelvin") {
+        return value - 273.15;
+      }
+
+      return value;
+    }
+
+    function fromCelsius(celsius) {
+      return {
+        celsius,
+        fahrenheit: celsius * 9 / 5 + 32,
+        kelvin: celsius + 273.15
+      };
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const rawValue = temperatureInput.value.trim();
+      const value = Number(rawValue);
+      const unit = new FormData(form).get("unit");
+
+      if (rawValue === "" || Number.isNaN(value) || !Number.isFinite(value)) {
+        message.textContent = "Please enter a valid number.";
+        result.textContent = "Waiting for valid input";
+        temperatureInput.focus();
+        return;
+      }
+
+      if (unit === "kelvin" && value < 0) {
+        message.textContent = "Kelvin cannot be below 0.";
+        result.textContent = "Waiting for valid input";
+        temperatureInput.focus();
+        return;
+      }
+
+      const celsius = toCelsius(value, unit);
+
+      if (celsius < -273.15) {
+        message.textContent = "That temperature is below absolute zero.";
+        result.textContent = "Waiting for valid input";
+        temperatureInput.focus();
+        return;
+      }
+
+      const conversions = fromCelsius(celsius);
+      const output = Object.entries(conversions)
+        .filter(([key]) => key !== unit)
+        .map(([key, convertedValue]) => format(convertedValue, key))
+        .join(" / ");
+
+      message.textContent = "";
+      result.textContent = output;
+    });
+  </script>
+</body>
+</html>
